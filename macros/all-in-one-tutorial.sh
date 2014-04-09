@@ -26,9 +26,9 @@ mkdir -p outputfiles-demo
 
 
 #-- generate a text input file with a fake dataset that has no signal with the sig250 model for the signal.
-root -b -q 'gen_input_file3.c+("outputfiles-demo/input-metsig-nosig-250-4metbin.txt",250,0.,4,0.,"METsig")' 2>&1 | tee logfiles-demo/gen-input-metsig-nosig-250-4metbin.log
+root -b -q 'gen_input_file3.c+("outputfiles-demo/input-metsig-nosig-250-4metbin.txt",4,0.,"met_sig")' 2>&1 | tee logfiles-demo/gen-input-metsig-nosig-250-4metbin.log
 #-- generate a text input file with a fake dataset that includes some signal at the predicted cross sec with the sig250 model for the signal.
-root -b -q 'gen_input_file3.c+("outputfiles-demo/input-metsig-withsig-250-4metbin.txt",250,1.,4,0.,"METsig")' 2>&1 | tee logfiles-demo/gen-input-metsig-withsig-250-4metbin.log
+#root -b -q 'gen_input_file3.c+("outputfiles-demo/input-metsig-withsig-250-4metbin.txt",250,1.,4,0.,"METsig")' 2>&1 | tee logfiles-demo/gen-input-metsig-withsig-250-4metbin.log
 
 
 

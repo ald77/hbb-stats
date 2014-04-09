@@ -1,4 +1,3 @@
-
 #include "TChain.h"
 #include "TCanvas.h"
 #include "TH1.h"
@@ -25,7 +24,7 @@ TChain* bgcompchain[5] ;
 //----------------
 
 
-float dataIntLumiIPB(19399.) ;
+float dataIntLumiIPB(1.) ;
 
 
 
@@ -44,7 +43,7 @@ float met_bin_edges[100] ;
 void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
                       int bins_of_met = 4,
                       float min_met = 0.,
-                      const char* metvarname = "METsig",
+                      const char* metvarname = "met_sig",
                       bool use3b = true,
                       bool usePUweight = true,
                       int  closure_syst_option = 1,
@@ -62,7 +61,7 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
   ///bool fill_noweight_histograms(false) ;
   bool fill_noweight_histograms(true) ;
 
-  if ( strcmp( metvarname, "METsig" ) == 0 ) {
+  if ( strcmp( metvarname, "METsig" ) == 0  || strcmp(metvarname, "met_sig")==0) {
     met_bin_edges_4bins[0] =  30. ;
     met_bin_edges_4bins[1] =  50. ;
     met_bin_edges_4bins[2] = 100. ;
@@ -74,7 +73,7 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
     met_bin_edges_4bins[2] =  85. ;
     met_bin_edges_4bins[3] = 120. ;
     met_bin_edges_4bins[4] = 10000. ;
-  } else if ( strcmp( metvarname, "MET" ) == 0 ) {
+  } else if ( strcmp( metvarname, "MET" ) == 0 || strcmp(metvarname, "met")==0) {
     met_bin_edges_4bins[0] = 106. ;
     met_bin_edges_4bins[1] = 133. ;
     met_bin_edges_4bins[2] = 190. ;
@@ -113,100 +112,95 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
 
   printf("\n\n Setting up reduced tree chains.\n\n" ) ;
 
-  for ( int si=0; si<nbgcomps; si++ ) { bgcompchain[si] = new TChain("reducedTree") ; }
+  for ( int si=0; si<nbgcomps; si++ ) { bgcompchain[si] = new TChain("reduced_tree") ; }
 
-  ///// char rtdir[10000] = "/data/cms/hadronic-susy-bjets/hbb/reduced-trees-may23-2013" ;
-  ///// char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-july08-2013" ;
-  ///// char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-july11-2013-pt20" ;
-  ///// char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-sept17-2013-v71-1s" ;
-  ///// char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-skim-sept17-2013-v71-1s" ;
-  ///////////char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-slim-oct08-2013-v71-5b" ;
-  char rtdir[10000] = "/Users/owen/work/cms/hadronic-susy-bjets/hbb/reduced-trees-skim-oct12-2013-v71-5b/" ;
+  char rtdir[10000] = "/cms5r0/ald77/Hbb/reduced_trees/" ;
 
   printf("\n\n\n   Reduced tree directory: %s\n\n\n", rtdir ) ;
-
-  char namestub[1000] = "JES0_JER0_PFMETTypeI_METunc0_PUunc0_hpt20"; //v71 version
 
   int compIndex(0) ;
 
   char pathandfile[10000] ;
 
   //--- ttbar, 1 lepton
-  sprintf( pathandfile, "%s/reducedTree.%s.TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7C-v1_AODSIM_UCSB1884ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7C-v1_AODSIM_UCSB1884_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext1-v1_AODSIM_UCSB1962_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/TTJets_SemiLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19_ext2-v1_AODSIM_UCSB1959_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/TTJets_WToBC_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V19-v1_AODSIM_UCSB1966_v71.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   //--- ttbar, 2 lepton
-  sprintf( pathandfile, "%s/reducedTree.%s.TTJets_FullLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7C-v2_AODSIM_UCSB1883ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/TTJets_FullLeptMGDecays_8TeV-madgraph-tauola_Summer12_DR53X-PU_S10_START53_V7C-v2_AODSIM_UCSB1883_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   compIndex++ ;
 
 
   //--- Znn
-  sprintf( pathandfile, "%s/reducedTree.%s.ZJetsToNuNu_100_HT_200_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1887ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZJetsToNuNu_200_HT_400_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1888ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZJetsToNuNu_200_HT_400_TuneZ2Star_8TeV_madgraph_ext_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1889ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZJetsToNuNu_400_HT_inf_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1890ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZJetsToNuNu_400_HT_inf_TuneZ2Star_8TeV_madgraph_ext_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1891ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/ZJetsToNuNu_100_HT_200_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1887_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZJetsToNuNu_200_HT_400_TuneZ2Star_8TeV_madgraph_ext_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1889_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZJetsToNuNu_200_HT_400_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1888_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZJetsToNuNu_400_HT_inf_TuneZ2Star_8TeV_madgraph_ext_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1891_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZJetsToNuNu_400_HT_inf_TuneZ2Star_8TeV_madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1890_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   compIndex++ ;
 
   //--- QCD
-  sprintf( pathandfile, "%s/reducedTree.%s.BJets_HT-1000ToInf_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1895ra2b_v71s-skim.root", rtdir, namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.BJets_HT-250To500_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1893ra2b_v71s-skim.root", rtdir, namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.BJets_HT-500To1000_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1894ra2b_v71s-skim.root", rtdir, namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/BJets_HT-1000ToInf_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1895_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/BJets_HT-250To500_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1893_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/BJets_HT-500To1000_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1894_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   //--- ttbar, hadronic (grouped with QCD)
-  sprintf( pathandfile, "%s/reducedTree.%s.TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_AODSIM_UCSB1880ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/TTJets_HadronicMGDecays_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A_ext-v1_AODSIM_UCSB1880_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   compIndex++ ;
 
   //--- wjets and single top
-  sprintf( pathandfile, "%s/reducedTree.%s.W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1877ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1878ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1879ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1860ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.T_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1861ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1862ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1864ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1865ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1866ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/Tbar_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1864_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/Tbar_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1865_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/Tbar_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1866_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/T_s-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1860_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/T_t-channel_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1861_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/T_tW-channel-DR_TuneZ2star_8TeV-powheg-tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1862_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/W2JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1877_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/W3JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1878_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/W4JetsToLNu_TuneZ2Star_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1879_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   compIndex++ ;
 
   //--- everything else: ttZ, ttW, ttH, WW, WZ, ZZ, WH, ZH
-  sprintf( pathandfile, "%s/reducedTree.%s.TTH_HToBB_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1855ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1857ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1856ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.WH_WToLNu_HToBB_M-125_8TeV-powheg-herwigpp_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1858ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.WW_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1874ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.WZ_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1875ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZH_ZToBB_HToBB_M-125_8TeV-powheg-herwigpp_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1868ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
-  sprintf( pathandfile, "%s/reducedTree.%s.ZZ_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1876ra2b_v71s-skim.root", rtdir,namestub ) ;
-  bgcompchain[compIndex] -> Add( pathandfile ) ;
+  sprintf(pathandfile, "%s/TTH_HToBB_M-125_8TeV-pythia6_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1855_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/TTWJets_8TeV-madgraph_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1857_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/TTZJets_8TeV-madgraph_v2_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1856_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/WH_WToLNu_HToBB_M-125_8TeV-powheg-herwigpp_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1858_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/WW_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1874_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/WZ_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1875_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZH_ZToBB_HToBB_M-125_8TeV-powheg-herwigpp_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1868_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
+  sprintf(pathandfile, "%s/ZZ_TuneZ2star_8TeV_pythia6_tauola_Summer12_DR53X-PU_S10_START53_V7A-v1_AODSIM_UCSB1876_v71_SyncSkim.root", rtdir);
+  bgcompchain[compIndex]->Add(pathandfile);
   compIndex++ ;
-
-
-
 
   //--- Define cuts.
 
@@ -215,15 +209,15 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
   //--- These are included in the skim definition of doSlimSkim.c.  Doesn't hurt to apply them here.
 
   char basiccuts[10000] ;
-  sprintf( basiccuts, "cutPV==1&&passCleaning==1&&buggyEvent==0&& MET/caloMET<2 && maxTOBTECjetDeltaMult<40" ) ;
+  sprintf(basiccuts, "(passesPVCut && passesMETCleaningCut)");
 
   char triggercuts[10000] ;
-  sprintf( triggercuts, "(passMC_DiCentralPFJet30_PFMET80_BTagCSV07==1||passMC_PFMET150==1||passMC_DiCentralPFJet30_PFMHT80==1)" ) ;
+  sprintf(triggercuts, "(passesTriggerCut)");
   char triggercuts_data[10000] ;
-  sprintf( triggercuts_data, "(pass_DiCentralPFJet30_PFMET80_BTagCSV07==1||pass_PFMET150==1||pass_DiCentralPFJet30_PFMHT80==1)" ) ;
+  sprintf(triggercuts_data, "(passesTriggerCut)" ) ;
 
   char njetcuts[10000] ;
-  sprintf( njetcuts, "njets20>=4&&njets20<=5" ) ;
+  sprintf(njetcuts, "passesNumJetsCut");
 
   char skimcuts[10000] ;
   //--- It's safe both in data and MC to require both triggercuts and triggercuts_data.
@@ -234,32 +228,32 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
   //--- These are beyond the skim selection.
 
   char leptonveto[10000] ;
-  sprintf( leptonveto, "%s", "nMuons==0&&nElectrons==0&&nIsoPFcands10_010==0&&nTausLoose==0" ) ;
+  sprintf(leptonveto, "(passesLeptonVetoCut && passesIsoTrackVetoCut)");
 
   char drmaxcut[10000] ;
-  sprintf( drmaxcut, "%s", "deltaRmax_hh<2.2" ) ;
+  sprintf(drmaxcut, "(passesDRCut)");
 
   char mindphicut[10000] ;
-  sprintf( mindphicut, "%s", "((METsig>50&&minDeltaPhi20_eta5_noIdAll_nobeta>0.3)||(METsig<50&&minDeltaPhi20_eta5_noIdAll_nobeta>0.5))" ) ;
+  sprintf(mindphicut, "(passesMinDeltaPhiCut && passesMETSig30Cut)");
 
   char jet2ptcut[10000] ;
-  sprintf( jet2ptcut, "%s", "jetpt2>50" ) ;
+  sprintf(jet2ptcut, "(passesJet2PtCut)");
 
 
   char masssigcuts[10000] ;
-  sprintf( masssigcuts, "%s", "abs(higgsMbb1MassDiff-higgsMbb2MassDiff)<20&&((0.5*(higgsMbb1MassDiff+higgsMbb2MassDiff)>100)&&(0.5*(higgsMbb1MassDiff+higgsMbb2MassDiff)<140))" ) ;
+  sprintf(masssigcuts, "(higgs_mass_signal_region)");
 
   char masssbcuts[10000] ;
-  sprintf( masssbcuts, "%s", "!(abs(higgsMbb1MassDiff-higgsMbb2MassDiff)<30&&((0.5*(higgsMbb1MassDiff+higgsMbb2MassDiff)>90)&&(0.5*(higgsMbb1MassDiff+higgsMbb2MassDiff)<150)))" ) ;
+  sprintf(masssbcuts, "(higgs_mass_sideband)");
 
   char btag4bcuts[10000] ;
-  sprintf( btag4bcuts, "%s", "CSVbest2>0.898&&CSVbest3>0.679&&CSVbest4>0.244" ) ;
+  sprintf(btag4bcuts, "(num_b_tagged_jets>=4)");
 
   char btag3bcuts[10000] ;
-  sprintf( btag3bcuts, "%s", "CSVbest2>0.898&&CSVbest3>0.679&&CSVbest4<0.244" ) ;
+  sprintf(btag3bcuts, "(num_b_tagged_jets==3)");
 
   char btag2bcuts[10000] ;
-  sprintf( btag2bcuts, "%s", "CSVbest2>0.898&&CSVbest3<0.679" ) ;
+  sprintf(btag2bcuts, "(num_b_tagged_jets==2)");
 
   char allcommoncuts[10000] ;
   sprintf( allcommoncuts, "(%s)&&(%s)&&(%s)&&(%s)&&(%s)", skimcuts, leptonveto, drmaxcut, jet2ptcut, mindphicut ) ;
@@ -376,35 +370,35 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
   if ( usePUweight ) {
     sprintf( puweight, "*PUweight" ) ;
   } else {
-    sprintf( puweight, "" ) ;
+    sprintf( puweight, "*1" ) ;
   }
 
   //note : topPtWeight is set to 1 for samples other than ttbar, so it is safe to use everywhere
   //this syntax is a hack to weight events with the trigger efficiency correction in bins of METsig; note that there is no correction for METsig<30
   //for METsig<30, just use the same correction as 30<METsig<50
   char extraWeightFactors[10000] ;
-  sprintf(extraWeightFactors,"((0.804*(METsig<50)+0.897*(METsig>=50&&METsig<100)+0.944*(METsig>=100))*topPtWeight)");
+  sprintf(extraWeightFactors,"((0.804*(met_sig<50)+0.897*(met_sig>=50&&met_sig<100)+0.944*(met_sig>=100))*top_pt_weight_official)");
 
   for ( int si=0; si<nbgcomps; si++ ) {
 
     printf("\n\n ++++++++ %s component\n\n", bgcompname[si] ) ;
 
     sprintf( arg1, "%s>>h_%s_4b_msig_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssigcuts, btag4bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssigcuts, btag4bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
     h_4b_msig_bg[si] -> Print("all") ;
 
     sprintf( arg1, "%s>>h_%s_3b_msig_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssigcuts, btag3bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssigcuts, btag3bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
     h_3b_msig_bg[si] -> Print("all") ;
 
     sprintf( arg1, "%s>>h_%s_2b_msig_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssigcuts, btag2bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssigcuts, btag2bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
@@ -412,21 +406,21 @@ void gen_input_file3( const char* outfilename = "outputfiles/input-file.txt",
 
 
     sprintf( arg1, "%s>>h_%s_4b_msb_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssbcuts, btag4bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssbcuts, btag4bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
     h_4b_msb_bg[si] -> Print("all") ;
 
     sprintf( arg1, "%s>>h_%s_3b_msb_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssbcuts, btag3bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssbcuts, btag3bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
     h_3b_msb_bg[si] -> Print("all") ;
 
     sprintf( arg1, "%s>>h_%s_2b_msb_bg_%s", metvarname, metvarname_nospecial.Data(), bgcompname[si] ) ;
-    sprintf( allcuts, "((%s)&&(%s)&&(%s))*weight3%s*%s*%.0f", allcommoncuts, masssbcuts, btag2bcuts, puweight, extraWeightFactors, dataIntLumiIPB ) ;
+    sprintf(allcuts, "((%s)&&(%s)&&(%s))*full_weight*%.0f", allcommoncuts, masssbcuts, btag2bcuts, dataIntLumiIPB);
     printf("\n %s : %s\n", arg1, allcuts ) ; fflush(stdout) ;
     bgcompchain[si] -> Draw( arg1, allcuts ) ;
     can->Update() ; can->Draw() ;
