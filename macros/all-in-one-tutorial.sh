@@ -33,8 +33,8 @@ root -b -q 'gen_input_file3.c+("outputfiles-demo/input-metsig-nosig-250-4metbin.
 
 
 #-- build the workspace root files.
-root -b -q 'build_hbb_workspace1.c+("outputfiles-demo/input-metsig-nosig-250-4metbin.txt","outputfiles-demo/ws-metsig-nosig-250-4metbin.root")' 2>&1 | tee logfiles-demo/build-ws-metsig-nosig-250-4metbin.log
-root -b -q 'build_hbb_workspace1.c+("outputfiles-demo/input-metsig-withsig-250-4metbin.txt","outputfiles-demo/ws-metsig-withsig-250-4metbin.root")' 2>&1 | tee logfiles-demo/build-ws-metsig-withsig-250-4metbin.log
+root -b -q 'build_hbb_workspace3.c+("outputfiles-demo/input-metsig-nosig-250-4metbin.txt","outputfiles-demo/ws-metsig-nosig-250-4metbin.root")' 2>&1 | tee logfiles-demo/build-ws-metsig-nosig-250-4metbin.log
+#root -b -q 'build_hbb_workspace1.c+("outputfiles-demo/input-metsig-withsig-250-4metbin.txt","outputfiles-demo/ws-metsig-withsig-250-4metbin.root")' 2>&1 | tee logfiles-demo/build-ws-metsig-withsig-250-4metbin.log
 
 
 
@@ -44,7 +44,7 @@ root -b -q 'build_hbb_workspace1.c+("outputfiles-demo/input-metsig-withsig-250-4
 #   MC values.  You can skip this step if you are only interested in the frequentist limit and/or significance
 #   analysis below.
 root -b -q 'fitqual_plots.c+("outputfiles-demo/ws-metsig-nosig-250-4metbin.root")' 2>&1 | tee logfiles-demo/fitqual-metsig-nosig-250-4metbin.log
-root -b -q 'fitqual_plots.c+("outputfiles-demo/ws-metsig-withsig-250-4metbin.root")' 2>&1 | tee logfiles-demo/fitqual-metsig-withsig-250-4metbin.log
+#root -b -q 'fitqual_plots.c+("outputfiles-demo/ws-metsig-withsig-250-4metbin.root")' 2>&1 | tee logfiles-demo/fitqual-metsig-withsig-250-4metbin.log
 
 
 
@@ -59,6 +59,6 @@ root -b -q 'rundemo.c("outputfiles-demo/ws-metsig-nosig-250-4metbin.root",0,$max
 
 
 #-- run the toys-based significance analysis.
-root -b -q 'rundemosignif.c("outputfiles-demo/ws-metsig-withsig-250-4metbin.root",0,5000)  ' 2>&1 | tee logfiles-demo/signif-met-withsig-250-4metbin.log
+#root -b -q 'rundemosignif.c("outputfiles-demo/ws-metsig-withsig-250-4metbin.root",0,5000)  ' 2>&1 | tee logfiles-demo/signif-met-withsig-250-4metbin.log
 
 
